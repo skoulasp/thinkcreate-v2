@@ -1,0 +1,121 @@
+/* ===============================
+   Admin Layout
+================================ */
+
+.admin-body {
+    margin: 0;
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    background: #f8fafc;
+    color: #1f2937;
+}
+
+.admin-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-topnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-brand a {
+    font-weight: 600;
+    text-decoration: none;
+    color: #111827;
+}
+
+.admin-label {
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-user a {
+    text-decoration: none;
+    color: #374151;
+}
+
+.admin-username {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #dc2626;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+}
+
+.admin-layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+}
+
+.admin-sidebar {
+    width: 220px;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    padding: 1.5rem 1rem;
+}
+
+.admin-sidebar h4 {
+    margin-top: 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+}
+
+.admin-sidebar li {
+    margin-bottom: 0.5rem;
+}
+
+.admin-sidebar a {
+    text-decoration: none;
+    color: #374151;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 2rem;
+}
+
+.alert {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background: #ecfdf5;
+    border: 1px solid #10b981;
+}
+
+.alert-error {
+    background: #fef2f2;
+    border: 1px solid #ef4444;
+}

@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('layouts.public')
 
 @section('title', 'Login | ' . config('app.name', 'Laravel'))
 
