@@ -20,7 +20,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.index')->name('dashboard');
 
     Route::resource('posts', AdminPostController::class)->except(['show']);

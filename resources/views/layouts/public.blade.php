@@ -14,6 +14,35 @@
         @endif
     </head>
     <body>
+        <nav aria-label="Primary navigation">
+            <div class="container">
+                <a href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
+
+                <div>
+                    @guest
+                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('register') }}">Register</a>
+                    @endguest
+
+                    @auth
+                        @if (Auth::user()->is_admin === true)
+                            <a href="{{ route('admin.index') }}">Admin Dashboard</a>
+                        @endif
+
+                        <span>Welcome, {{ Auth::user()->name }}</span>
+
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" hidden>
+                            @csrf
+                        </form>
+                    @endauth
+                </div>
+            </div>
+        </nav>
+
         <main>
             @yield('content')
         </main>
