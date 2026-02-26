@@ -21,6 +21,8 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->name('logout');
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::view('/', 'admin.index')->name('dashboard');
+
     Route::resource('posts', AdminPostController::class)->except(['show']);
     Route::resource('pages', AdminPageController::class)->except(['show']);
 });
