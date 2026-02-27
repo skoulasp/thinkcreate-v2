@@ -24,6 +24,8 @@
             <ul>
                 <li><a href="{{ route('admin.posts.index') }}">Posts</a></li>
                 <li><a href="{{ route('admin.pages.index') }}">Pages</a></li>
+                <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
+                <li><a href="{{ route('admin.tags.index') }}">Tags</a></li>
             </ul>
         </div>
     </aside>

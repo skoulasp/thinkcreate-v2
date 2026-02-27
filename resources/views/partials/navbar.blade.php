@@ -9,6 +9,8 @@
         <div class="user">
             <a href="{{ route('admin.posts.index') }}">Posts</a>
             <a href="{{ route('admin.pages.index') }}">Pages</a>
+            <a href="{{ route('admin.categories.index') }}">Categories</a>
+            <a href="{{ route('admin.tags.index') }}">Tags</a>
 
             <span class="username">
                 {{ auth()->user()->name ?? auth()->user()->email }}
@@ -36,7 +38,7 @@
 
             @auth
                 @if (Auth::user()->is_admin === true)
-                    <a href="{{ route('admin.index') }}">Admin Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
                 @endif
 
                 <span class="username">Welcome, {{ Auth::user()->name }}</span>

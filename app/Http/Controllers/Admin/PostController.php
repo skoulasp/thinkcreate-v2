@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -15,7 +17,9 @@ class PostController extends Controller
     {
         $this->authorize('viewAny', Post::class);
 
-        $posts = Post::latest()->paginate(15);
+        $posts = Post::with(['author', 'categories', 'tags'])
+            ->latest()
+            ->paginate(15);
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -24,7 +28,10 @@ class PostController extends Controller
     {
         $this->authorize('create', Post::class);
 
-        return view('admin.posts.create');
+        $categories = Category::orderBy('name')->get();
+        $tags = Tag::orderBy('name')->get();
+
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -74,7 +81,12 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
 
-        return view('admin.posts.edit', compact('post'));
+        $post->load(['categories', 'tags']);
+
+        $categories = Category::orderBy('name')->get();
+        $tags = Tag::orderBy('name')->get();
+
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     public function update(Request $request, Post $post): RedirectResponse
@@ -111,13 +123,8 @@ class PostController extends Controller
             'published_at' => $validated['published_at'] ?? null,
         ]);
 
-        if (array_key_exists('categories', $validated)) {
-            $post->categories()->sync($validated['categories'] ?? []);
-        }
-
-        if (array_key_exists('tags', $validated)) {
-            $post->tags()->sync($validated['tags'] ?? []);
-        }
+        $post->categories()->sync($validated['categories'] ?? []);
+        $post->tags()->sync($validated['tags'] ?? []);
 
         return back()->with('success', 'Post updated successfully.');
     }

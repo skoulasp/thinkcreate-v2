@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +27,6 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
 
     Route::resource('posts', AdminPostController::class)->except(['show']);
     Route::resource('pages', AdminPageController::class)->except(['show']);
+    Route::resource('categories', AdminCategoryController::class)->only(['index', 'create', 'store']);
+    Route::resource('tags', AdminTagController::class)->only(['index', 'create', 'store']);
 });
