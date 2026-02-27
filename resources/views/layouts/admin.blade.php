@@ -15,28 +15,7 @@
 </head>
 <body class="admin-body">
 
-<header class="admin-header">
-    <nav class="admin-topnav">
-        <div class="admin-brand">
-            <a href="{{ route('home') }}">{{ config('app.name') }}</a>
-            <span class="admin-label">Admin</span>
-        </div>
-
-        <div class="admin-user">
-            <a href="{{ route('admin.posts.index') }}">Posts</a>
-            <a href="{{ route('admin.pages.index') }}">Pages</a>
-
-            <span class="admin-username">
-                {{ auth()->user()->name ?? auth()->user()->email }}
-            </span>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="btn-link">Logout</button>
-            </form>
-        </div>
-    </nav>
-</header>
+@include('partials.navbar', ['variant' => 'admin'])
 
 <div class="admin-layout">
     <aside class="admin-sidebar">
