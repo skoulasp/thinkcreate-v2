@@ -27,6 +27,6 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
 
     Route::resource('posts', AdminPostController::class)->except(['show']);
     Route::resource('pages', AdminPageController::class)->except(['show']);
-    Route::resource('categories', AdminCategoryController::class)->only(['index', 'create', 'store']);
-    Route::resource('tags', AdminTagController::class)->only(['index', 'create', 'store']);
+    Route::resource('categories', AdminCategoryController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::resource('tags', AdminTagController::class)->only(['index', 'create', 'store', 'edit', 'update']);
 });

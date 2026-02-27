@@ -9,21 +9,44 @@
             <p><a href="{{ route('admin.posts.index') }}">Back to posts</a></p>
         </header>
 
-        <form method="POST" action="{{ route('admin.posts.store') }}" novalidate>
+        @php
+            $initialTitle = old('title', '');
+            $initialSlug = old('slug', '');
+            $initialManual = old('manual_slug') == '1';
+        @endphp
+
+        <form
+            method="POST"
+            action="{{ route('admin.posts.store') }}"
+            novalidate
+            x-data="slugForm(@js($initialTitle), @js($initialSlug), @js($initialManual))"
+            x-init="init()"
+        >
             @csrf
 
             <div>
                 <label for="title">Title</label>
-                <input id="title" name="title" type="text" value="{{ old('title') }}" required>
+                <input id="title" name="title" type="text" value="{{ old('title') }}" x-model="name" @input="syncSlug()" required>
                 @error('title')
                     <p>{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
+                <label for="manual_slug">
+                    <input id="manual_slug" name="manual_slug" type="checkbox" value="1" x-model="manualSlug" @change="toggleManual()">
+                    Set slug manually
+                </label>
+            </div>
+
+            <div>
                 <label for="slug">Slug</label>
-                <input id="slug" name="slug" type="text" value="{{ old('slug') }}">
+                <input id="slug" name="slug" type="text" value="{{ old('slug') }}" x-model="slug" :disabled="!manualSlug">
+                <input type="hidden" name="slug_effective" :value="manualSlug ? slug : slugify(name)">
                 @error('slug')
+                    <p>{{ $message }}</p>
+                @enderror
+                @error('slug_effective')
                     <p>{{ $message }}</p>
                 @enderror
             </div>

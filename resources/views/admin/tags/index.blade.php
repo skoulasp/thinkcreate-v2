@@ -18,6 +18,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Created</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@
                             <td>{{ $tag->name }}</td>
                             <td>{{ $tag->slug }}</td>
                             <td>{{ $tag->created_at }}</td>
+                            <td><a href="{{ route('admin.tags.edit', $tag) }}">Edit</a></td>
                         </tr>
                     @endforeach
                 </tbody>

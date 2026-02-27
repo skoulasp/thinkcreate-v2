@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -33,7 +34,9 @@ class PageController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:pages,slug'],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'slug_effective' => ['nullable', 'string', 'max:255'],
+            'manual_slug' => ['nullable', 'boolean'],
             'body' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
@@ -47,9 +50,24 @@ class PageController extends Controller
             $validated['published_at'] = null;
         }
 
+        $manualSlug = $request->boolean('manual_slug');
+        $submittedSlug = $manualSlug
+            ? ($validated['slug'] ?? null)
+            : ($validated['slug_effective'] ?? null);
+
+        $slug = blank($submittedSlug) || ! $manualSlug
+            ? Str::slug($validated['title'])
+            : $submittedSlug;
+
+        $request->merge(['slug' => $slug]);
+
+        $finalSlug = $request->validate([
+            'slug' => ['required', 'string', 'max:255', Rule::unique('pages', 'slug')],
+        ])['slug'];
+
         $page = Page::create([
             'title' => $validated['title'],
-            'slug' => $validated['slug'] ?? null,
+            'slug' => $finalSlug,
             'body' => $validated['body'],
             'status' => $validated['status'],
             'published_at' => $validated['published_at'] ?? null,
@@ -73,7 +91,9 @@ class PageController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('pages', 'slug')->ignore($page->id)],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'slug_effective' => ['nullable', 'string', 'max:255'],
+            'manual_slug' => ['nullable', 'boolean'],
             'body' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
@@ -87,9 +107,24 @@ class PageController extends Controller
             $validated['published_at'] = null;
         }
 
+        $manualSlug = $request->boolean('manual_slug');
+        $submittedSlug = $manualSlug
+            ? ($validated['slug'] ?? null)
+            : ($validated['slug_effective'] ?? null);
+
+        $slug = blank($submittedSlug) || ! $manualSlug
+            ? Str::slug($validated['title'])
+            : $submittedSlug;
+
+        $request->merge(['slug' => $slug]);
+
+        $finalSlug = $request->validate([
+            'slug' => ['required', 'string', 'max:255', Rule::unique('pages', 'slug')->ignore($page->id)],
+        ])['slug'];
+
         $page->update([
             'title' => $validated['title'],
-            'slug' => $validated['slug'] ?? $page->slug,
+            'slug' => $finalSlug,
             'body' => $validated['body'],
             'status' => $validated['status'],
             'published_at' => $validated['published_at'] ?? null,

@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -40,7 +41,9 @@ class PostController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:posts,slug'],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'slug_effective' => ['nullable', 'string', 'max:255'],
+            'manual_slug' => ['nullable', 'boolean'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
@@ -59,10 +62,25 @@ class PostController extends Controller
             $validated['published_at'] = null;
         }
 
+        $manualSlug = $request->boolean('manual_slug');
+        $submittedSlug = $manualSlug
+            ? ($validated['slug'] ?? null)
+            : ($validated['slug_effective'] ?? null);
+
+        $slug = blank($submittedSlug) || ! $manualSlug
+            ? Str::slug($validated['title'])
+            : $submittedSlug;
+
+        $request->merge(['slug' => $slug]);
+
+        $finalSlug = $request->validate([
+            'slug' => ['required', 'string', 'max:255', Rule::unique('posts', 'slug')],
+        ])['slug'];
+
         $post = Post::create([
             'user_id' => $request->user()->id,
             'title' => $validated['title'],
-            'slug' => $validated['slug'] ?? null,
+            'slug' => $finalSlug,
             'excerpt' => $validated['excerpt'] ?? null,
             'body' => $validated['body'],
             'status' => $validated['status'],
@@ -95,7 +113,9 @@ class PostController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('posts', 'slug')->ignore($post->id)],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'slug_effective' => ['nullable', 'string', 'max:255'],
+            'manual_slug' => ['nullable', 'boolean'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['required', 'string'],
             'status' => ['required', 'in:draft,published'],
@@ -114,9 +134,24 @@ class PostController extends Controller
             $validated['published_at'] = null;
         }
 
+        $manualSlug = $request->boolean('manual_slug');
+        $submittedSlug = $manualSlug
+            ? ($validated['slug'] ?? null)
+            : ($validated['slug_effective'] ?? null);
+
+        $slug = blank($submittedSlug) || ! $manualSlug
+            ? Str::slug($validated['title'])
+            : $submittedSlug;
+
+        $request->merge(['slug' => $slug]);
+
+        $finalSlug = $request->validate([
+            'slug' => ['required', 'string', 'max:255', Rule::unique('posts', 'slug')->ignore($post->id)],
+        ])['slug'];
+
         $post->update([
             'title' => $validated['title'],
-            'slug' => $validated['slug'] ?? $post->slug,
+            'slug' => $finalSlug,
             'excerpt' => $validated['excerpt'] ?? null,
             'body' => $validated['body'],
             'status' => $validated['status'],
