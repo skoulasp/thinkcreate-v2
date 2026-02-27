@@ -1,0 +1,83 @@
+form {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 100%;
+}
+
+form > div,
+form > fieldset {
+    min-width: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+    color: var(--muted-text);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="datetime-local"],
+textarea,
+select {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    background: var(--surface);
+    color: inherit;
+    font: inherit;
+}
+
+textarea {
+    min-height: 7rem;
+    resize: vertical;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 1px;
+}
+
+fieldset {
+    margin: 0;
+    padding: var(--space-3);
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+}
+
+legend {
+    padding-inline: 0.35rem;
+    font-weight: 600;
+}
+
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    background: #f3f4f6;
+    color: inherit;
+    padding: 0.55rem 0.9rem;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e5e7eb;
+}

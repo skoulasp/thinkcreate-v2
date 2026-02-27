@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: #f9fafb;
+}
+
+a {
+    color: #1f4f9c;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+    text-decoration: underline;
+}
