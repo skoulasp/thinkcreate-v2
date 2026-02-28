@@ -157,6 +157,14 @@
     background: #e5ebf3;
 }
 
+.sidebar-section {
+    margin-bottom: 2rem;
+    h4 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+}
+
 @media (max-width: 900px) {
     .admin-layout {
         flex-direction: column;

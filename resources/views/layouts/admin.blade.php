@@ -28,6 +28,12 @@
                 <li><a href="{{ route('admin.tags.index') }}">Tags</a></li>
             </ul>
         </div>
+        <div class="sidebar-section">
+            <h4>Account</h4>
+            <ul>
+                <li><a href="{{ route('admin.settings.edit') }}">Settings</a></li>
+            </ul>
+        </div>
     </aside>
 
     <main class="admin-main">
