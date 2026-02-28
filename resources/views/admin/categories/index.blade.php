@@ -4,9 +4,9 @@
 
 @section('content')
     <section>
-        <header>
+        <header class="admin-index-header">
             <h1>Categories</h1>
-            <p><a href="{{ route('admin.categories.create') }}">Create new category</a></p>
+            <a href="{{ route('admin.categories.create') }}" class="btn admin-create-link">Create new category</a>
         </header>
 
         @if ($categories->isEmpty())

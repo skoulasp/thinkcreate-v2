@@ -32,6 +32,7 @@
         </div>
 
         <div class="user">
+            <a href="{{ route('blog.index') }}">Blog</a>
             @guest
                 <a href="{{ route('login') }}">Login</a>
                 <a href="{{ route('register') }}">Register</a>

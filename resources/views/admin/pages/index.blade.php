@@ -4,9 +4,9 @@
 
 @section('content')
     <section>
-        <header>
+        <header class="admin-index-header">
             <h1>Pages</h1>
-            <p><a href="{{ route('admin.pages.create') }}">Create new page</a></p>
+            <a href="{{ route('admin.pages.create') }}" class="btn admin-create-link">Create new page</a>
         </header>
 
         @if ($pages->isEmpty())
@@ -24,7 +24,11 @@
                 <tbody>
                     @foreach ($pages as $page)
                         <tr>
-                            <td>{{ $page->title }}</td>
+                            <td>
+                                <a href="{{ route('pages.show', $page) }}" target="_blank" rel="noopener noreferrer">
+                                    {{ $page->title }}
+                                </a>
+                            </td>
                             <td>{{ ucfirst($page->status) }}</td>
                             <td>{{ $page->published_at ?: '-' }}</td>
                             <td>

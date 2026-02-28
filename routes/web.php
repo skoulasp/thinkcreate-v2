@@ -5,11 +5,15 @@ use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PageController as PublicPageController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
@@ -35,3 +39,5 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
     Route::patch('settings/profile', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::patch('settings/password', [AdminSettingsController::class, 'updatePassword'])->name('settings.password.update');
 });
+
+Route::get('/{page:slug}', [PublicPageController::class, 'show'])->name('pages.show');

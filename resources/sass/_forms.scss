@@ -102,16 +102,33 @@ button:active {
     transform: translateY(1px);
 }
 
-button[type="submit"] {
+form[novalidate] button[type="submit"] {
     background: var(--color-primary);
     border-color: var(--color-primary);
     color: #ffffff;
     padding: 0.3rem 0.6rem;
 }
 
-button[type="submit"]:hover {
+form[novalidate] button[type="submit"]:hover {
     background: #1e40af;
     border-color: #1e40af;
+}
+
+form[style*="display: inline"] button[type="submit"] {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--color-error);
+    min-height: auto;
+    padding: 0;
+    border-radius: 0;
+    font-weight: 500;
+}
+
+form[style*="display: inline"] button[type="submit"]:hover {
+    background: transparent;
+    border: 0;
+    text-decoration: underline;
 }
 
 .btn,

@@ -4,9 +4,9 @@
 
 @section('content')
     <section>
-        <header>
+        <header class="admin-index-header">
             <h1>Posts</h1>
-            <p><a href="{{ route('admin.posts.create') }}">Create new post</a></p>
+            <a href="{{ route('admin.posts.create') }}" class="btn admin-create-link">Create new post</a>
         </header>
 
         @if ($posts->isEmpty())
@@ -25,7 +25,11 @@
                 <tbody>
                     @foreach ($posts as $post)
                         <tr>
-                            <td>{{ $post->title }}</td>
+                            <td>
+                                <a href="{{ route('blog.show', $post) }}" target="_blank" rel="noopener noreferrer">
+                                    {{ $post->title }}
+                                </a>
+                            </td>
                             <td>{{ ucfirst($post->status) }}</td>
                             <td>{{ $post->author->name ?? $post->author->email ?? 'Unknown' }}</td>
                             <td>{{ $post->published_at ?: '-' }}</td>

@@ -4,9 +4,9 @@
 
 @section('content')
     <section>
-        <header>
+        <header class="admin-index-header">
             <h1>Tags</h1>
-            <p><a href="{{ route('admin.tags.create') }}">Create new tag</a></p>
+            <a href="{{ route('admin.tags.create') }}" class="btn admin-create-link">Create new tag</a>
         </header>
 
         @if ($tags->isEmpty())

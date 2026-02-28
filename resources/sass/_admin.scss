@@ -157,6 +157,26 @@
     background: #e5ebf3;
 }
 
+.admin-index-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.admin-index-header h1 {
+    margin-bottom: 0;
+}
+
+.admin-create-link::before {
+    content: "+";
+    display: inline-block;
+    margin-right: 0.45rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
 .sidebar-section {
     margin-bottom: 2rem;
     h4 {
@@ -191,5 +211,10 @@
 
     .admin-main {
         padding: var(--space-5) var(--space-4);
+    }
+
+    .admin-index-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
