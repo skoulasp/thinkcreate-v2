@@ -11,6 +11,7 @@
             <a href="{{ route('admin.pages.index') }}">Pages</a>
             <a href="{{ route('admin.categories.index') }}">Categories</a>
             <a href="{{ route('admin.tags.index') }}">Tags</a>
+            <span class="user-separator" aria-hidden="true"></span>
 
             <span class="username">
                 {{ auth()->user()->name ?? auth()->user()->email }}
