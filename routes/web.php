@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\MenuController as AdminMenuController;
+use App\Http\Controllers\Admin\MenuItemController as AdminMenuItemController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
@@ -34,6 +36,13 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
     Route::resource('pages', AdminPageController::class)->except(['show']);
     Route::resource('categories', AdminCategoryController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::resource('tags', AdminTagController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::resource('menus', AdminMenuController::class)->except(['show']);
+    Route::get('menus/{menu}/items/create', [AdminMenuItemController::class, 'create'])->name('menus.items.create');
+    Route::post('menus/{menu}/items', [AdminMenuItemController::class, 'store'])->name('menus.items.store');
+    Route::get('menus/{menu}/items/{item}/edit', [AdminMenuItemController::class, 'edit'])->name('menus.items.edit');
+    Route::patch('menus/{menu}/items/{item}', [AdminMenuItemController::class, 'update'])->name('menus.items.update');
+    Route::delete('menus/{menu}/items/{item}', [AdminMenuItemController::class, 'destroy'])->name('menus.items.destroy');
+    Route::post('menus/{menu}/items/reorder', [AdminMenuItemController::class, 'reorder'])->name('menus.items.reorder');
 
     Route::get('settings', [AdminSettingsController::class, 'edit'])->name('settings.edit');
     Route::patch('settings/profile', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');

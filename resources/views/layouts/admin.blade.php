@@ -26,6 +26,7 @@
                 <li><a href="{{ route('admin.pages.index') }}">Pages</a></li>
                 <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                 <li><a href="{{ route('admin.tags.index') }}">Tags</a></li>
+                <li><a href="{{ route('admin.menus.index') }}">Navigation</a></li>
             </ul>
         </div>
         <div class="sidebar-section">

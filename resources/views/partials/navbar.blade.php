@@ -11,6 +11,7 @@
             <a href="{{ route('admin.pages.index') }}">Pages</a>
             <a href="{{ route('admin.categories.index') }}">Categories</a>
             <a href="{{ route('admin.tags.index') }}">Tags</a>
+            <a href="{{ route('admin.menus.index') }}">Navigation</a>
             <span class="user-separator" aria-hidden="true"></span>
 
             <span class="username">
@@ -25,6 +26,14 @@
     </nav>
 </header>
 @elseif ($variant === 'public')
+@php
+    $mainMenu = \App\Models\Menu::query()
+        ->where('slug', 'main')
+        ->with(['items' => fn ($query) => $query->with('page')->orderBy('sort_order')])
+        ->first();
+
+    $mainMenuItems = $mainMenu?->items ?? collect();
+@endphp
 <header class="header">
     <nav class="topnav" aria-label="Primary navigation">
         <div class="brand">
@@ -32,7 +41,19 @@
         </div>
 
         <div class="user">
-            <a href="{{ route('blog.index') }}">Blog</a>
+            @forelse ($mainMenuItems as $menuItem)
+                @php
+                    $href = $menuItem->page
+                        ? route('pages.show', $menuItem->page)
+                        : $menuItem->url;
+                @endphp
+                @if (filled($href))
+                    <a href="{{ $href }}">{{ $menuItem->display_label }}</a>
+                @endif
+            @empty
+                <a href="{{ route('blog.index') }}">Blog</a>
+            @endforelse
+
             @guest
                 <a href="{{ route('login') }}">Login</a>
                 <a href="{{ route('register') }}">Register</a>
