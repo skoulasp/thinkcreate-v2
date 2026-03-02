@@ -12,6 +12,7 @@
             <a href="{{ route('admin.categories.index') }}">Categories</a>
             <a href="{{ route('admin.tags.index') }}">Tags</a>
             <a href="{{ route('admin.menus.index') }}">Navigation</a>
+            <a href="{{ route('admin.menu-locations.edit') }}">Menu Locations</a>
             <span class="user-separator" aria-hidden="true"></span>
 
             <span class="username">
@@ -27,12 +28,53 @@
 </header>
 @elseif ($variant === 'public')
 @php
-    $mainMenu = \App\Models\Menu::query()
-        ->where('slug', 'main')
-        ->with(['items' => fn ($query) => $query->with('page')->orderBy('sort_order')])
+    $navbarLocation = \App\Models\MenuLocation::query()
+        ->where('location', 'navbar')
+        ->with(['menu.items' => fn ($query) => $query->with('page')->orderBy('sort_order')])
         ->first();
 
-    $mainMenuItems = $mainMenu?->items ?? collect();
+    $hasNavbarMenuAssigned = filled($navbarLocation?->menu_id);
+    $navbarMenuItems = $navbarLocation?->menu?->items ?? collect();
+
+    $reservedTopLevelSegments = [];
+
+    foreach (\Illuminate\Support\Facades\Route::getRoutes() as $route) {
+        $uri = $route->uri();
+
+        if ($uri === '' || str_contains($uri, '{')) {
+            continue;
+        }
+
+        $first = strtok($uri, '/');
+
+        if ($first !== false && $first !== '') {
+            $reservedTopLevelSegments[] = strtolower($first);
+        }
+    }
+
+    $reservedTopLevelSegments = array_values(array_unique($reservedTopLevelSegments));
+
+    $conflictsReservedTopLevelRoute = static function (string $path) use ($reservedTopLevelSegments): bool {
+        $parsed = parse_url($path);
+
+        if (($parsed['scheme'] ?? null) || ($parsed['host'] ?? null)) {
+            return false;
+        }
+
+        $routePath = trim($parsed['path'] ?? $path, '/');
+
+        if ($routePath === '') {
+            return false;
+        }
+
+        $firstSegment = strtok($routePath, '/');
+
+        if ($firstSegment === false) {
+            return false;
+        }
+
+        return in_array(strtolower($firstSegment), $reservedTopLevelSegments, true);
+    };
 @endphp
 <header class="header">
     <nav class="topnav" aria-label="Primary navigation">
@@ -41,18 +83,31 @@
         </div>
 
         <div class="user">
-            @forelse ($mainMenuItems as $menuItem)
-                @php
-                    $href = $menuItem->page
-                        ? route('pages.show', $menuItem->page)
-                        : $menuItem->url;
-                @endphp
-                @if (filled($href))
-                    <a href="{{ $href }}">{{ $menuItem->display_label }}</a>
-                @endif
-            @empty
+            @if (! $hasNavbarMenuAssigned)
                 <a href="{{ route('blog.index') }}">Blog</a>
-            @endforelse
+            @else
+                @foreach ($navbarMenuItems as $menuItem)
+                    @php
+                        $href = null;
+
+                        if ($menuItem->page) {
+                            $slugPath = trim($menuItem->page->slug, '/');
+
+                            if ($slugPath !== '' && ! $conflictsReservedTopLevelRoute($slugPath)) {
+                                $href = url('/'.$slugPath);
+                            }
+                        } elseif (filled($menuItem->url) && ! $conflictsReservedTopLevelRoute($menuItem->url)) {
+                            $href = $menuItem->url;
+                        }
+
+                        $label = $menuItem->label ?: ($menuItem->page?->title ?: $menuItem->url);
+                    @endphp
+
+                    @if (filled($href) && filled($label))
+                        <a href="{{ $href }}">{{ $label }}</a>
+                    @endif
+                @endforeach
+            @endif
 
             @guest
                 <a href="{{ route('login') }}">Login</a>

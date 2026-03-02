@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('title', 'Navigation - Admin - ' . config('app.name'))
 
@@ -6,7 +6,10 @@
     <section>
         <header class="admin-index-header">
             <h1>Navigation</h1>
-            <a href="{{ route('admin.menus.create') }}" class="btn admin-create-link">Create new menu</a>
+            <div>
+                <a href="{{ route('admin.menu-locations.edit') }}" class="btn admin-create-link">Menu locations</a>
+                <a href="{{ route('admin.menus.create') }}" class="btn admin-create-link">Create new menu</a>
+            </div>
         </header>
 
         @if ($menus->isEmpty())

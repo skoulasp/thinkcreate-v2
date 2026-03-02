@@ -19,4 +19,9 @@ class Menu extends Model
     {
         return $this->hasMany(MenuItem::class)->orderBy('sort_order');
     }
+
+    public function locations(): HasMany
+    {
+        return $this->hasMany(MenuLocation::class);
+    }
 }
