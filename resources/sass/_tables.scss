@@ -43,3 +43,70 @@ tbody tr:hover {
         white-space: nowrap;
     }
 }
+
+nav[aria-label="Pagination Navigation"] {
+    margin-top: var(--space-4);
+}
+
+nav[aria-label="Pagination Navigation"] .sm\:hidden {
+    display: none;
+}
+
+nav[aria-label="Pagination Navigation"] .sm\:flex-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+nav[aria-label="Pagination Navigation"] .sm\:flex-1 > div:first-child {
+    color: var(--color-text-soft);
+    font-size: 0.9rem;
+}
+
+nav[aria-label="Pagination Navigation"] .inline-flex {
+    display: inline-flex;
+    align-items: center;
+}
+
+nav[aria-label="Pagination Navigation"] a,
+nav[aria-label="Pagination Navigation"] span[aria-current="page"] > span,
+nav[aria-label="Pagination Navigation"] span[aria-disabled="true"] > span {
+    text-decoration: none;
+    min-height: 2rem;
+    min-width: 2rem;
+    padding: 0.42rem 0.66rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+nav[aria-label="Pagination Navigation"] span[aria-current="page"] > span {
+    background: var(--color-surface-subtle);
+    font-weight: 650;
+}
+
+nav[aria-label="Pagination Navigation"] span[aria-disabled="true"] > span {
+    color: var(--color-text-soft);
+    cursor: not-allowed;
+}
+
+nav[aria-label="Pagination Navigation"] svg {
+    width: 1rem;
+    height: 1rem;
+    display: block;
+}
+
+@media (max-width: 640px) {
+    nav[aria-label="Pagination Navigation"] .sm\:hidden {
+        display: flex;
+        gap: var(--space-2);
+    }
+
+    nav[aria-label="Pagination Navigation"] .sm\:flex-1 {
+        display: none;
+    }
+}
