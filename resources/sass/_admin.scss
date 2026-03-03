@@ -22,6 +22,7 @@ body.admin-body {
     aside.admin-sidebar {
         background-color: #dce8e2;
         a {
+            font-size: 1.1rem;
             transition: all 0.3s;
             &:hover {
                 color: #c84eac;
@@ -133,6 +134,40 @@ body.admin-body {
     display: grid;
     gap: var(--space-4);
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.admin-stats-section {
+    margin-top: var(--space-6);
+}
+
+.admin-stats-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.admin-stat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-stat-label {
+    margin: 0 0 var(--space-2);
+    font-size: 0.9rem;
+    color: var(--color-text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.admin-stat-value {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    font-weight: 750;
+    color: var(--color-text);
 }
 
 .admin-card {

@@ -43,4 +43,28 @@
             </article>
         </section>
     </section>
+
+    <section class="admin-page admin-stats-section">
+        <header class="admin-page-header">
+            <h2>Website Stats</h2>
+            <p>Quick overview of your current content and registered members.</p>
+        </header>
+
+        <section class="admin-stats-grid" aria-label="Website statistics">
+            <article class="admin-stat-card">
+                <p class="admin-stat-label">Total Posts</p>
+                <p class="admin-stat-value">{{ number_format($stats['posts']) }}</p>
+            </article>
+
+            <article class="admin-stat-card">
+                <p class="admin-stat-label">Total Pages</p>
+                <p class="admin-stat-value">{{ number_format($stats['pages']) }}</p>
+            </article>
+
+            <article class="admin-stat-card">
+                <p class="admin-stat-label">Registered Users</p>
+                <p class="admin-stat-value">{{ number_format($stats['users']) }}</p>
+            </article>
+        </section>
+    </section>
 @endsection
