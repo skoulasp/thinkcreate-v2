@@ -1,6 +1,40 @@
 /* ===============================
    Admin Layout
 ================================ */
+body.admin-body {
+    background-color: #ebefed;
+    nav.topnav {
+        background-color: #44b480;
+        font-size: 1.1rem;
+
+        a {
+            font-size: inherit;
+            color: #fff;
+            &:hover {
+                color: #ffdaf6;
+            }
+        }
+        span:not(span.label) {
+            font-size: inherit;
+            color: #fff;
+        }
+    }
+    aside.admin-sidebar {
+        background-color: #dce8e2;
+        a {
+            transition: all 0.3s;
+            &:hover {
+                color: #c84eac;
+            }
+        }
+    }
+    section.admin-page {
+        background-color: #dce8e2;
+        article {
+            background-color: rgb(199, 219, 209);
+        }
+    }
+}
 
 .admin-body {
     margin: 0;

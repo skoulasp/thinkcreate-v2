@@ -24,7 +24,7 @@ input[type="date"],
 input[type="datetime-local"],
 textarea,
 select {
-    width: 100%;
+    width: 40%;
     min-height: 2.75rem;
     padding: 0.62rem 0.78rem;
     border: 1px solid var(--color-border);
@@ -78,6 +78,7 @@ legend {
 button {
     display: inline-flex;
     align-items: center;
+    max-width: fit-content;
     justify-content: center;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
@@ -93,10 +94,10 @@ button {
         transform 120ms ease;
 }
 
-button:hover {
-    background: #e5ebf3;
-    border-color: var(--color-border-strong);
-}
+// button:hover {
+//     background: #e5ebf3;
+//     border-color: var(--color-border-strong);
+// }
 
 button:active {
     transform: translateY(1px);

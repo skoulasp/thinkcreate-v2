@@ -6,7 +6,7 @@
     <section>
         <header>
             <h1>Settings</h1>
-            <p>Update your profile information and password.</p>
+            <p>Update your profile, password, and website settings.</p>
         </header>
 
         <section aria-labelledby="profile-settings-heading">
@@ -89,6 +89,59 @@
                 </div>
 
                 <button type="submit">Update password</button>
+            </form>
+        </section>
+
+        <section aria-labelledby="website-settings-heading">
+            <header>
+                <h2 id="website-settings-heading">Website Settings</h2>
+            </header>
+
+            <form method="POST" action="{{ route('admin.settings.website.update') }}" novalidate>
+                @csrf
+                @method('PATCH')
+
+                <div>
+                    <label for="posts_per_page">Posts per page</label>
+                    <input
+                        id="posts_per_page"
+                        name="posts_per_page"
+                        type="number"
+                        min="1"
+                        max="50"
+                        step="1"
+                        value="{{ old('posts_per_page', $postsPerPage) }}"
+                        required
+                    >
+                    <p>Used for the public blog index pagination. Allowed range: 1 to 50.</p>
+                </div>
+
+                <div>
+                    <label for="homepage_source">Homepage content</label>
+                    <select id="homepage_source" name="homepage_source" required>
+                        <option value="default" @selected(old('homepage_source', $homepageSource) === 'default')>Default welcome page</option>
+                        <option value="blog" @selected(old('homepage_source', $homepageSource) === 'blog')>Blog index</option>
+                        <option value="page" @selected(old('homepage_source', $homepageSource) === 'page')>Static page</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="homepage_page_id">Homepage page</label>
+                    <select id="homepage_page_id" name="homepage_page_id">
+                        <option value="">Select a published page</option>
+                        @foreach ($publishedPages as $page)
+                            <option
+                                value="{{ $page->id }}"
+                                @selected((string) old('homepage_page_id', $homepagePageId) === (string) $page->id)
+                            >
+                                {{ $page->title }} ({{ $page->slug }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <p>Used only when Homepage content is set to Static page.</p>
+                </div>
+
+                <button type="submit">Save website settings</button>
             </form>
         </section>
     </section>
