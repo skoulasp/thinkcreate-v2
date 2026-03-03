@@ -20,6 +20,12 @@
 
             <h1 class="blog-title">{{ $post->title }}</h1>
 
+            @if ($post->featured_image_path)
+                <figure class="blog-featured-image">
+                    <img src="{{ Storage::disk('public')->url($post->featured_image_path) }}" alt="{{ $post->title }}">
+                </figure>
+            @endif
+
             <div class="blog-content">
                 {!! nl2br(e($post->body)) !!}
             </div>

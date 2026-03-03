@@ -23,6 +23,7 @@ class Post extends Model
         'title',
         'slug',
         'excerpt',
+        'featured_image_path',
         'body',
         'status',
         'published_at',

@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -46,6 +47,7 @@ class PostController extends Controller
             'manual_slug' => ['nullable', 'boolean'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['required', 'string'],
+            'featured_image' => ['nullable', 'image', 'max:5120'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
             'categories' => ['nullable', 'array'],
@@ -77,12 +79,19 @@ class PostController extends Controller
             'slug' => ['required', 'string', 'max:255', Rule::unique('posts', 'slug')],
         ])['slug'];
 
+        $featuredImagePath = null;
+
+        if ($request->hasFile('featured_image')) {
+            $featuredImagePath = $request->file('featured_image')->store('posts/featured-images', 'public');
+        }
+
         $post = Post::create([
             'user_id' => $request->user()->id,
             'title' => $validated['title'],
             'slug' => $finalSlug,
             'excerpt' => $validated['excerpt'] ?? null,
             'body' => $validated['body'],
+            'featured_image_path' => $featuredImagePath,
             'status' => $validated['status'],
             'published_at' => $validated['published_at'] ?? null,
         ]);
@@ -117,7 +126,9 @@ class PostController extends Controller
             'slug_effective' => ['nullable', 'string', 'max:255'],
             'manual_slug' => ['nullable', 'boolean'],
             'excerpt' => ['nullable', 'string'],
+            'remove_featured_image' => ['nullable', 'boolean'],
             'body' => ['required', 'string'],
+            'featured_image' => ['nullable', 'image', 'max:5120'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
             'categories' => ['nullable', 'array'],
@@ -149,14 +160,33 @@ class PostController extends Controller
             'slug' => ['required', 'string', 'max:255', Rule::unique('posts', 'slug')->ignore($post->id)],
         ])['slug'];
 
+        $existingFeaturedImagePath = $post->featured_image_path;
+        $featuredImagePath = $existingFeaturedImagePath;
+
+        if ($request->boolean('remove_featured_image')) {
+            $featuredImagePath = null;
+        }
+
+        if ($request->hasFile('featured_image')) {
+            $featuredImagePath = $request->file('featured_image')->store('posts/featured-images', 'public');
+        }
+
         $post->update([
             'title' => $validated['title'],
             'slug' => $finalSlug,
             'excerpt' => $validated['excerpt'] ?? null,
             'body' => $validated['body'],
+            'featured_image_path' => $featuredImagePath,
             'status' => $validated['status'],
             'published_at' => $validated['published_at'] ?? null,
         ]);
+
+        if (
+            filled($existingFeaturedImagePath)
+            && $existingFeaturedImagePath !== $featuredImagePath
+        ) {
+            Storage::disk('public')->delete($existingFeaturedImagePath);
+        }
 
         $post->categories()->sync($validated['categories'] ?? []);
         $post->tags()->sync($validated['tags'] ?? []);
@@ -168,7 +198,13 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post);
 
+        $featuredImagePath = $post->featured_image_path;
+
         $post->delete();
+
+        if (filled($featuredImagePath)) {
+            Storage::disk('public')->delete($featuredImagePath);
+        }
 
         return redirect()
             ->route('admin.posts.index')

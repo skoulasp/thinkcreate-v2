@@ -19,6 +19,7 @@
         <form
             method="POST"
             action="{{ route('admin.posts.update', $post) }}"
+            enctype="multipart/form-data"
             novalidate
             x-data="slugForm(@js($initialTitle), @js($initialSlug), @js($initialManual))"
             x-init="init()"
@@ -57,6 +58,30 @@
                 <label for="excerpt">Excerpt</label>
                 <textarea id="excerpt" name="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
                 @error('excerpt')
+                    <p>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="featured_image">Featured image</label>
+                <input id="featured_image" name="featured_image" type="file" accept="image/*">
+                <p>Optional. Uploading a new image replaces the current one.</p>
+                @if ($post->featured_image_path)
+                    <p>
+                        Current:
+                        <a href="{{ Storage::disk('public')->url($post->featured_image_path) }}" target="_blank" rel="noopener noreferrer">
+                            View image
+                        </a>
+                    </p>
+                    <label for="remove_featured_image">
+                        <input id="remove_featured_image" name="remove_featured_image" type="checkbox" value="1" @checked(old('remove_featured_image') == '1')>
+                        Remove featured image
+                    </label>
+                @endif
+                @error('featured_image')
+                    <p>{{ $message }}</p>
+                @enderror
+                @error('remove_featured_image')
                     <p>{{ $message }}</p>
                 @enderror
             </div>

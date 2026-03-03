@@ -18,6 +18,7 @@
         <form
             method="POST"
             action="{{ route('admin.posts.store') }}"
+            enctype="multipart/form-data"
             novalidate
             x-data="slugForm(@js($initialTitle), @js($initialSlug), @js($initialManual))"
             x-init="init()"
@@ -63,6 +64,15 @@
                 <label for="body">Body</label>
                 <textarea id="body" name="body" rows="10" required>{{ old('body') }}</textarea>
                 @error('body')
+                    <p>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="featured_image">Featured image</label>
+                <input id="featured_image" name="featured_image" type="file" accept="image/*">
+                <p>Optional. JPG, PNG, GIF, WEBP, BMP, or SVG up to 5 MB.</p>
+                @error('featured_image')
                     <p>{{ $message }}</p>
                 @enderror
             </div>
