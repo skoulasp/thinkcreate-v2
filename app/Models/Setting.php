@@ -45,4 +45,15 @@ class Setting extends Model
 
         return $value;
     }
+
+    public static function getBoolValue(string $key, bool $default = false): bool
+    {
+        $raw = static::getValue($key);
+
+        if ($raw === null) {
+            return $default;
+        }
+
+        return in_array(strtolower($raw), ['1', 'true', 'on', 'yes'], true);
+    }
 }

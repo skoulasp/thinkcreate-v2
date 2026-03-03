@@ -3,6 +3,10 @@
 ================================ */
 body.admin-body {
     background-color: #ebefed;
+
+    h4 {
+        font-size: 1rem;
+    }
     nav.topnav {
         background-color: #44b480;
         font-size: 1.1rem;
@@ -213,7 +217,7 @@ body.admin-body {
 }
 
 .admin-actions a:first-child:hover {
-    background: #1e40af;
+    background: #0e693e;
 }
 
 .admin-actions a:last-child {

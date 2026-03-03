@@ -35,6 +35,7 @@
 
     $hasNavbarMenuAssigned = filled($navbarLocation?->menu_id);
     $navbarMenuItems = $navbarLocation?->menu?->items ?? collect();
+    $showBlogNavLink = \App\Models\Setting::getBoolValue('website.navbar.show_blog_link', false);
 
     $reservedTopLevelSegments = [];
 
@@ -83,9 +84,7 @@
         </div>
 
         <div class="user">
-            @if (! $hasNavbarMenuAssigned)
-                <a href="{{ route('blog.index') }}">Blog</a>
-            @else
+            @if ($hasNavbarMenuAssigned)
                 @foreach ($navbarMenuItems as $menuItem)
                     @php
                         $href = null;
@@ -107,6 +106,10 @@
                         <a href="{{ $href }}">{{ $label }}</a>
                     @endif
                 @endforeach
+            @endif
+
+            @if ($showBlogNavLink)
+                <a href="{{ route('blog.index') }}">Blog</a>
             @endif
 
             @guest

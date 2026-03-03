@@ -117,6 +117,20 @@
                 </div>
 
                 <div>
+                    <label for="show_blog_nav_link">
+                        <input
+                            id="show_blog_nav_link"
+                            name="show_blog_nav_link"
+                            type="checkbox"
+                            value="1"
+                            @checked((bool) old('show_blog_nav_link', $showBlogNavLink))
+                        >
+                        Show "Blog" link in public navbar
+                    </label>
+                    <p>When enabled, the Blog link appears after dynamic navbar pages and before login/register or admin links.</p>
+                </div>
+
+                <div>
                     <label for="homepage_source">Homepage content</label>
                     <select id="homepage_source" name="homepage_source" required>
                         <option value="default" @selected(old('homepage_source', $homepageSource) === 'default')>Default welcome page</option>

@@ -21,6 +21,7 @@ class UpdateWebsiteSettingsRequest extends FormRequest
         return [
             'homepage_source' => ['required', Rule::in(['default', 'blog', 'page'])],
             'posts_per_page' => ['required', 'integer', 'min:1', 'max:50'],
+            'show_blog_nav_link' => ['nullable', 'boolean'],
             'homepage_page_id' => [
                 Rule::requiredIf(fn () => $this->input('homepage_source') === 'page'),
                 'nullable',
@@ -42,6 +43,10 @@ class UpdateWebsiteSettingsRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $this->merge([
+            'show_blog_nav_link' => $this->boolean('show_blog_nav_link'),
+        ]);
+
         if ($this->input('homepage_source') !== 'page') {
             $this->merge([
                 'homepage_page_id' => null,

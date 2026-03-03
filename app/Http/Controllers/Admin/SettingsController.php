@@ -19,6 +19,7 @@ class SettingsController extends Controller
         $homepageSource = Setting::getValue('website.homepage.source', 'default');
         $homepagePageId = Setting::getValue('website.homepage.page_id');
         $postsPerPage = Setting::getIntValue('website.blog.posts_per_page', 5, 1, 50);
+        $showBlogNavLink = Setting::getBoolValue('website.navbar.show_blog_link', false);
 
         $publishedPages = Page::query()
             ->published()
@@ -30,6 +31,7 @@ class SettingsController extends Controller
             'homepageSource' => $homepageSource,
             'homepagePageId' => $homepagePageId,
             'postsPerPage' => $postsPerPage,
+            'showBlogNavLink' => $showBlogNavLink,
             'publishedPages' => $publishedPages,
         ]);
     }
@@ -71,6 +73,7 @@ class SettingsController extends Controller
         Setting::putValue('website.homepage.source', $validated['homepage_source']);
         Setting::putValue('website.homepage.page_id', isset($validated['homepage_page_id']) ? (string) $validated['homepage_page_id'] : null);
         Setting::putValue('website.blog.posts_per_page', (string) $validated['posts_per_page']);
+        Setting::putValue('website.navbar.show_blog_link', $validated['show_blog_nav_link'] ? '1' : '0');
 
         return back()->with('success', 'Website settings updated successfully.');
     }
