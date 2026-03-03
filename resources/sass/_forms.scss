@@ -185,3 +185,43 @@ form[style*="display: inline"] button[type="submit"]:hover {
     color: var(--color-primary);
     padding: 0;
 }
+
+.signin,
+.register {
+    min-width: fit-content;
+    width: 500px;
+    margin: 0 auto;
+    background: var(--color-surface);
+    // border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    input {
+        width: 100%;
+    }
+
+    .remember label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: flex-start;
+        input {
+            width: auto;
+        }
+    }
+
+    div.reglink,
+    div.signlink {
+        margin-top: var(--space-4);
+        text-align: center;
+        color: var(--color-text-muted);
+    }
+}
+
+.ck.ck-editor {
+    width: 100%;
+    max-width: 100%;
+}
+
+.ck.ck-editor__main > .ck-editor__editable {
+    min-height: 340px;
+}

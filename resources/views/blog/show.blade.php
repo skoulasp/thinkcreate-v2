@@ -27,7 +27,7 @@
             @endif
 
             <div class="blog-content">
-                {!! nl2br(e($post->body)) !!}
+                {!! $post->body !!}
             </div>
 
             <div class="blog-meta blog-meta-bottom">

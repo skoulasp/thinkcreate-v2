@@ -37,4 +37,24 @@ window.slugForm = (initialName = '', initialSlug = '', initialManual = false) =>
     },
 });
 
+const maybeInitPostEditor = () => {
+    if (!document.querySelector('textarea[data-rich-text-editor]')) {
+        return;
+    }
+
+    import('./post-editor')
+        .then((module) => {
+            module.default();
+        })
+        .catch((error) => {
+            console.error('Failed to load post editor module:', error);
+        });
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', maybeInitPostEditor);
+} else {
+    maybeInitPostEditor();
+}
+
 Alpine.start();

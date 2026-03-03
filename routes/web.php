@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\MenuItemController as AdminMenuItemController;
 use App\Http\Controllers\Admin\MenuLocationController as AdminMenuLocationController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\Admin\PostEditorImageController as AdminPostEditorImageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
@@ -46,6 +47,7 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
     })->name('dashboard');
 
     Route::resource('posts', AdminPostController::class)->except(['show']);
+    Route::post('posts/editor-images', [AdminPostEditorImageController::class, 'store'])->name('posts.editor-images.store');
     Route::resource('pages', AdminPageController::class)->except(['show']);
     Route::resource('categories', AdminCategoryController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::resource('tags', AdminTagController::class)->only(['index', 'create', 'store', 'edit', 'update']);

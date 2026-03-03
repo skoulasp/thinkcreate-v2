@@ -3,7 +3,7 @@
 @section('title', 'Register | ' . config('app.name', 'Laravel'))
 
 @section('content')
-    <section>
+    <section class="register">
         <h1>Create an account</h1>
 
         @if ($errors->any())
@@ -78,10 +78,11 @@
 
             <button type="submit">Create account</button>
         </form>
-
+    <div class="signlink""">
         <p>
             Already have an account?
             <a href="{{ route('login') }}">Sign in</a>
         </p>
+    </div>
     </section>
 @endsection

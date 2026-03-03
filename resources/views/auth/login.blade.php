@@ -3,7 +3,7 @@
 @section('title', 'Login | ' . config('app.name', 'Laravel'))
 
 @section('content')
-    <section>
+    <section class="signin">
         <h1>Sign in</h1>
 
         @if (session('status'))
@@ -49,19 +49,20 @@
                 @enderror
             </div>
 
-            <div>
+            <div class="remember">
                 <label for="remember">
+                    <span>Remember me</span> 
                     <input id="remember" name="remember" type="checkbox" value="1">
-                    Remember me
                 </label>
             </div>
 
             <button type="submit">Sign in</button>
         </form>
-
+<div class="reglink">
         <p>
             Need an account?
             <a href="{{ route('register') }}">Register</a>
         </p>
+        </div>
     </section>
 @endsection
