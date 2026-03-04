@@ -3,14 +3,40 @@
 @section('title', 'Blog - ' . config('app.name', 'Laravel'))
 
 @section('content')
+    <form class="blog-search" method="GET" action="{{ route('blog.index') }}">
+        <label class="blog-search-label" for="blog-search-input">Search posts</label>
+        <div class="blog-search-controls">
+            <input
+                id="blog-search-input"
+                name="q"
+                type="search"
+                value="{{ $search }}"
+                placeholder="Search by title or content"
+                autocomplete="off"
+            >
+            <button type="submit">Search</button>
+            @if ($search !== '')
+                <a class="blog-search-reset" href="{{ route('blog.index') }}">Clear</a>
+            @endif
+        </div>
+    </form>
+
     <section class="public-blog">
         <header class="blog-header">
             <h1>Blog</h1>
-            <p>Recent published posts.</p>
+            @if ($search !== '')
+                <p class="results">Results for "{{ $search }}".</p>
+            @else
+                <p>Recent published posts.</p>
+            @endif
         </header>
 
         @if ($posts->isEmpty())
-            <p class="blog-empty">No published posts yet.</p>
+            @if ($search !== '')
+                <p class="blog-empty">No posts found for "{{ $search }}".</p>
+            @else
+                <p class="blog-empty">No published posts yet.</p>
+            @endif
         @else
             <div class="blog-list">
                 @foreach ($posts as $post)
