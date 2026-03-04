@@ -8,7 +8,7 @@
             <h1 class="blog-title">{{ $page->title }}</h1>
 
             <div class="blog-content">
-                {!! nl2br(e($page->body)) !!}
+                {!! $page->body !!}
             </div>
         </article>
     </section>

@@ -22,7 +22,7 @@
 
             @if ($post->featured_image_path)
                 <figure class="blog-featured-image">
-                    <img src="{{ Storage::disk('public')->url($post->featured_image_path) }}" alt="{{ $post->title }}">
+                    <img src="{{  Storage::url($post->featured_image_path) }}" alt="{{ $post->title }}">
                 </figure>
             @endif
 

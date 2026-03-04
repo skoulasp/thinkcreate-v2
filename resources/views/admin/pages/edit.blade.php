@@ -55,7 +55,14 @@
 
             <div>
                 <label for="body">Body</label>
-                <textarea id="body" name="body" rows="12" required>{{ old('body', $page->body) }}</textarea>
+                <textarea
+                    id="body"
+                    name="body"
+                    rows="12"
+                    required
+                    data-rich-text-editor
+                    data-editor-upload-url="{{ route('admin.posts.editor-images.store', absolute: false) }}"
+                >{{ old('body', $page->body) }}</textarea>
                 @error('body')
                     <p>{{ $message }}</p>
                 @enderror
