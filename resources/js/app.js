@@ -37,6 +37,60 @@ window.slugForm = (initialName = '', initialSlug = '', initialManual = false) =>
     },
 });
 
+window.commentVote = ({
+    canVote = false,
+    voteUrl = '',
+    csrfToken = '',
+    likesCount = 0,
+    dislikesCount = 0,
+    currentVote = null,
+}) => ({
+    canVote: Boolean(canVote),
+    voteUrl,
+    csrfToken,
+    likesCount: Number(likesCount) || 0,
+    dislikesCount: Number(dislikesCount) || 0,
+    currentVote,
+    isSubmitting: false,
+    errorMessage: '',
+
+    async submitVote(vote) {
+        if (!this.canVote || this.isSubmitting) {
+            return;
+        }
+
+        this.isSubmitting = true;
+        this.errorMessage = '';
+
+        try {
+            const response = await fetch(this.voteUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': this.csrfToken,
+                },
+                body: JSON.stringify({ vote }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Unable to save vote.');
+            }
+
+            const payload = await response.json();
+            this.likesCount = Number(payload.likes_count) || 0;
+            this.dislikesCount = Number(payload.dislikes_count) || 0;
+            this.currentVote = payload.current_vote;
+        } catch (error) {
+            this.errorMessage = 'Vote failed. Please try again.';
+            console.error(error);
+        } finally {
+            this.isSubmitting = false;
+        }
+    },
+});
+
 const maybeInitPostEditor = () => {
     if (!document.querySelector('textarea[data-rich-text-editor]')) {
         return;

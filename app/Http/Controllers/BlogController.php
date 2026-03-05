@@ -33,18 +33,34 @@ class BlogController extends Controller
         return view('blog.index', compact('posts', 'search'));
     }
 
-    public function show(Post $post): View
+    public function show(Request $request, Post $post): View
     {
         abort_unless(
             Post::query()->published()->whereKey($post->getKey())->exists(),
             404
         );
 
+        $currentUserId = $request->user()?->id;
+
         $post->load([
             'author',
             'categories',
             'tags',
-            'comments' => fn ($query) => $query->with('author')->latest(),
+            'comments' => fn ($query) => $query
+                ->with('author')
+                ->withCount([
+                    'votes as likes_count' => fn ($voteQuery) => $voteQuery->where('value', 1),
+                    'votes as dislikes_count' => fn ($voteQuery) => $voteQuery->where('value', -1),
+                ])
+                ->with([
+                    'votes' => fn ($voteQuery) => $voteQuery
+                        ->when(
+                            $currentUserId,
+                            fn ($subQuery) => $subQuery->where('user_id', $currentUserId),
+                            fn ($subQuery) => $subQuery->whereRaw('1 = 0')
+                        ),
+                ])
+                ->latest(),
         ]);
 
         return view('blog.show', compact('post'));

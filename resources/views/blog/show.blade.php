@@ -89,12 +89,72 @@
                 @else
                     <div class="blog-comments-list">
                         @foreach ($post->comments as $comment)
+                            @php
+                                $currentVote = null;
+
+                                if (auth()->check()) {
+                                    $currentVoteValue = $comment->votes->first()?->value;
+
+                                    if ($currentVoteValue === 1) {
+                                        $currentVote = 'like';
+                                    } elseif ($currentVoteValue === -1) {
+                                        $currentVote = 'dislike';
+                                    }
+                                }
+                            @endphp
                             <article class="blog-comment-item">
                                 <div class="blog-comment-meta">
                                     <strong>{{ $comment->author->name }}</strong>
                                     <span>{{ $comment->created_at->format('M j, Y H:i') }}</span>
                                 </div>
                                 <p>{!! nl2br(e($comment->body)) !!}</p>
+
+                                <div
+                                    class="blog-comment-footer"
+                                    x-data="commentVote({
+                                        canVote: @js(auth()->check()),
+                                        voteUrl: @js(route('comments.vote', $comment)),
+                                        csrfToken: @js(csrf_token()),
+                                        likesCount: @js((int) $comment->likes_count),
+                                        dislikesCount: @js((int) $comment->dislikes_count),
+                                        currentVote: @js($currentVote),
+                                    })"
+                                >
+                                    <div class="blog-comment-votes">
+                                        <button
+                                            type="button"
+                                            class="blog-comment-vote-button"
+                                            :class="{ 'is-active-like': currentVote === 'like' }"
+                                            :disabled="!canVote || isSubmitting"
+                                            @click="submitVote('like')"
+                                            title="Like"
+                                        >
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M2 22h4V10H2v12Zm20-11c0-1.1-.9-2-2-2h-6.3l1-4.6.03-.32c0-.41-.17-.79-.44-1.06L13.17 2 6.59 8.59C6.22 8.95 6 9.45 6 10v10c0 1.1.9 2 2 2h9c.82 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2Z" fill="currentColor"/>
+                                            </svg>
+                                            <span x-text="likesCount"></span>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="blog-comment-vote-button"
+                                            :class="{ 'is-active-dislike': currentVote === 'dislike' }"
+                                            :disabled="!canVote || isSubmitting"
+                                            @click="submitVote('dislike')"
+                                            title="Dislike"
+                                        >
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M15 3H6c-.82 0-1.54.5-1.84 1.22L1.14 11.27c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.3l-1 4.6-.03.32c0 .41.17.79.44 1.06L9.83 22l6.58-6.59c.37-.36.59-.86.59-1.41V4c0-1.1-.9-2-2-2Zm5 0h-4v12h4V3Z" fill="currentColor"/>
+                                            </svg>
+                                            <span x-text="dislikesCount"></span>
+                                        </button>
+                                    </div>
+
+                                    <p class="blog-comment-vote-note" x-show="!canVote">
+                                        <a href="{{ route('login') }}">Log in</a> to vote.
+                                    </p>
+                                    <p class="blog-comment-vote-error" x-show="errorMessage" x-text="errorMessage"></p>
+                                </div>
                             </article>
                         @endforeach
                     </div>

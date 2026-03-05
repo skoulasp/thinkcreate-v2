@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentVoteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController as PublicPageController;
 use App\Models\Page;
@@ -26,6 +27,9 @@ Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.sho
 Route::post('/blog/{post:slug}/comments', [CommentController::class, 'store'])
     ->middleware('auth')
     ->name('blog.comments.store');
+Route::post('/comments/{comment}/vote', [CommentVoteController::class, 'store'])
+    ->middleware('auth')
+    ->name('comments.vote');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');

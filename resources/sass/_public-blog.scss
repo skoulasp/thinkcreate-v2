@@ -168,7 +168,6 @@
     border-radius: var(--radius-md);
     background: var(--color-surface);
     padding: var(--space-5);
-    border: 1px solid var(--color-border);
 }
 
 .blog-comments-header {
@@ -231,6 +230,80 @@
     margin: 0;
 }
 
+.blog-comment-footer {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-1);
+}
+
+.blog-comment-votes {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.blog-comment-vote-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text-soft);
+    padding: 0.2rem 0.55rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
+}
+
+.blog-comment-vote-button svg {
+    width: 0.95rem;
+    height: 0.95rem;
+}
+
+.blog-comment-vote-button:hover:not(:disabled),
+.blog-comment-vote-button:focus-visible:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.blog-comment-vote-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.blog-comment-vote-button.is-active-like {
+    border-color: #16a34a;
+    color: #16a34a;
+    background: color-mix(in srgb, #16a34a 12%, transparent);
+}
+
+.blog-comment-vote-button.is-active-dislike {
+    border-color: #dc2626;
+    color: #dc2626;
+    background: color-mix(in srgb, #dc2626 12%, transparent);
+}
+
+.blog-comment-vote-note,
+.blog-comment-vote-error {
+    margin: 0;
+    font-size: 0.78rem;
+}
+
+.blog-comment-vote-note {
+    color: var(--color-text-soft);
+}
+
+.blog-comment-vote-error {
+    color: var(--color-error);
+}
+
 @media (max-width: 640px) {
     .blog-search-controls {
         flex-wrap: wrap;
@@ -258,5 +331,13 @@
     .blog-comment-meta {
         flex-direction: column;
         gap: var(--space-1);
+    }
+
+    .blog-comment-footer {
+        align-items: stretch;
+    }
+
+    .blog-comment-votes {
+        justify-content: flex-end;
     }
 }
