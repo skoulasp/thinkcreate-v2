@@ -96,6 +96,23 @@
             </div>
 
             <div>
+                <input type="hidden" name="comments_enabled" value="0">
+                <label for="comments_enabled">
+                    <input
+                        id="comments_enabled"
+                        name="comments_enabled"
+                        type="checkbox"
+                        value="1"
+                        @checked(old('comments_enabled', '0') == '1')
+                    >
+                    Enable comments for this post
+                </label>
+                @error('comments_enabled')
+                    <p>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
                 <label for="published_at">Published at</label>
                 <input
                     id="published_at"

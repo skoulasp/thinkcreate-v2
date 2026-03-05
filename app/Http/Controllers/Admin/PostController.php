@@ -48,6 +48,7 @@ class PostController extends Controller
             'excerpt' => ['nullable', 'string'],
             'body' => ['required', 'string', 'not_regex:/<script\b/i'],
             'featured_image' => ['nullable', 'image', 'max:5120'],
+            'comments_enabled' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
             'categories' => ['nullable', 'array'],
@@ -92,6 +93,7 @@ class PostController extends Controller
             'excerpt' => $validated['excerpt'] ?? null,
             'body' => $validated['body'],
             'featured_image_path' => $featuredImagePath,
+            'comments_enabled' => $request->boolean('comments_enabled'),
             'status' => $validated['status'],
             'published_at' => $validated['published_at'] ?? null,
         ]);
@@ -129,6 +131,7 @@ class PostController extends Controller
             'remove_featured_image' => ['nullable', 'boolean'],
             'body' => ['required', 'string', 'not_regex:/<script\b/i'],
             'featured_image' => ['nullable', 'image', 'max:5120'],
+            'comments_enabled' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
             'categories' => ['nullable', 'array'],
@@ -177,6 +180,7 @@ class PostController extends Controller
             'excerpt' => $validated['excerpt'] ?? null,
             'body' => $validated['body'],
             'featured_image_path' => $featuredImagePath,
+            'comments_enabled' => $request->boolean('comments_enabled'),
             'status' => $validated['status'],
             'published_at' => $validated['published_at'] ?? null,
         ]);

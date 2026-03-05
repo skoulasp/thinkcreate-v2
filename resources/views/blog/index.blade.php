@@ -42,15 +42,31 @@
                 @foreach ($posts as $post)
                     <article class="blog-card">
                         <div class="blog-meta blog-meta-top">
-                            <span class="blog-meta-left">
+                            <span class="blog-meta-left blog-meta-item">
+                                <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.01-8 4.5V20h16v-1.5c0-2.49-3.58-4.5-8-4.5Z" fill="currentColor"/>
+                                </svg>
                                 {{ $post->author->name ?? $post->author->email ?? 'Unknown author' }}
                             </span>
-                            <span class="blog-meta-right">
-                                @if ($post->published_at)
-                                    {{ \Illuminate\Support\Carbon::parse($post->published_at)->format('M j, Y') }}
-                                @else
-                                    -
+                            <span class="blog-meta-right blog-meta-inline">
+                                @if ($post->comments_enabled)
+                                    <span class="blog-meta-item" title="{{ $post->comments_count }} {{ \Illuminate\Support\Str::plural('comment', $post->comments_count) }}">
+                                        <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 4c-4.97 0-9 3.13-9 7s4.03 7 9 7c.73 0 1.44-.07 2.12-.2L19.6 20.8l-1.92-3.72C19.81 15.73 21 13.54 21 11c0-3.87-4.03-7-9-7Z" fill="currentColor"/>
+                                        </svg>
+                                        {{ $post->comments_count }}
+                                    </span>
                                 @endif
+                                <span class="blog-meta-item">
+                                    <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm1 11h-5V7h2v4h4Z" fill="currentColor"/>
+                                    </svg>
+                                    @if ($post->published_at)
+                                        {{ \Illuminate\Support\Carbon::parse($post->published_at)->format('M j, Y') }}
+                                    @else
+                                        -
+                                    @endif
+                                </span>
                             </span>
                         </div>
 
@@ -67,18 +83,21 @@
                         </p>
 
                         <div class="blog-meta blog-meta-bottom">
-                            <span class="blog-meta-left">
+                            <span class="blog-meta-left blog-meta-item">
+                                <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M10 3H3v7h7Zm0 11H3v7h7ZM21 3h-7v7h7Zm0 11h-7v7h7Z" fill="currentColor"/>
+                                </svg>
                                 @if ($post->categories->isNotEmpty())
-                                    Categories: {{ $post->categories->pluck('name')->implode(', ') }}
+                                    {{ $post->categories->pluck('name')->implode(', ') }}
                                 @else
-                                    Categories: -
+                                    -
                                 @endif
                             </span>
                             <span class="blog-meta-right">
                                 @if ($post->tags->isNotEmpty())
-                                    Tags: {{ $post->tags->pluck('name')->implode(', ') }}
+                                    {{ $post->tags->pluck('name')->map(fn ($name) => "#{$name}")->implode(' ') }}
                                 @else
-                                    Tags: -
+                                    -
                                 @endif
                             </span>
                         </div>
@@ -86,9 +105,11 @@
                 @endforeach
             </div>
 
-            <div class="blog-pagination">
-                {{ $posts->links() }}
-            </div>
+
         @endif
     </section>
+    
+    <div class="blog-pagination">
+       {{ $posts->links() }}
+    </div>
 @endsection

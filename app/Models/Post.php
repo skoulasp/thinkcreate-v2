@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -24,10 +25,19 @@ class Post extends Model
         'slug',
         'excerpt',
         'featured_image_path',
+        'comments_enabled',
         'body',
         'status',
         'published_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'comments_enabled' => 'boolean',
+            'published_at' => 'datetime',
+        ];
+    }
 
 protected static function booted(): void
 {
@@ -88,6 +98,11 @@ protected static function uniqueSlugFor(string $value, ?int $ignoreId = null): s
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function scopePublished(Builder $query): Builder

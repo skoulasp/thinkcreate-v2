@@ -16,6 +16,7 @@ class BlogController extends Controller
 
         $posts = Post::query()
             ->with(['author', 'categories', 'tags'])
+            ->withCount('comments')
             ->published()
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($innerQuery) use ($search) {
@@ -39,7 +40,12 @@ class BlogController extends Controller
             404
         );
 
-        $post->loadMissing(['author', 'categories', 'tags']);
+        $post->load([
+            'author',
+            'categories',
+            'tags',
+            'comments' => fn ($query) => $query->with('author')->latest(),
+        ]);
 
         return view('blog.show', compact('post'));
     }

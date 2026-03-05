@@ -76,6 +76,8 @@
 
         return in_array(strtolower($firstSegment), $reservedTopLevelSegments, true);
     };
+
+    $hasMainPublicNavLinks = $hasNavbarMenuAssigned || $showBlogNavLink;
 @endphp
 <header class="header">
     <nav class="topnav" aria-label="Primary navigation">
@@ -112,17 +114,21 @@
                 <a href="{{ route('blog.index') }}">Blog</a>
             @endif
 
+            @if ($hasMainPublicNavLinks)
+                <span class="user-separator" aria-hidden="true"></span>
+            @endif
+
             @guest
                 <a href="{{ route('login') }}">Login</a>
                 <a href="{{ route('register') }}">Register</a>
             @endguest
 
             @auth
+            <span class="username">Welcome, {{ Auth::user()->name }} 👋</span>
                 @if (Auth::user()->is_admin === true)
                     <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
                 @endif
 
-                <span class="username">Welcome, {{ Auth::user()->name }}</span>
 
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     Logout
