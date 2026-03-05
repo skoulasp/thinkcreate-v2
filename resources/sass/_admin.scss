@@ -310,6 +310,7 @@ body.admin-body {
 
     .admin-sidebar {
         width: 100%;
+        min-height: auto;
         border-right: 0;
         border-bottom: 1px solid var(--color-border);
         padding: var(--space-4);
