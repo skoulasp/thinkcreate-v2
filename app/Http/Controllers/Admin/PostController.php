@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Setting;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,8 +33,15 @@ class PostController extends Controller
 
         $categories = Category::orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
+        $defaultCommentsEnabled = Setting::getBoolValue('website.posts.defaults.comments_enabled', false);
 
-        return view('admin.posts.create', compact('categories', 'tags'));
+        $defaultStatus = Setting::getValue('website.posts.defaults.status', 'draft');
+
+        if (! in_array($defaultStatus, ['draft', 'published'], true)) {
+            $defaultStatus = 'draft';
+        }
+
+        return view('admin.posts.create', compact('categories', 'tags', 'defaultCommentsEnabled', 'defaultStatus'));
     }
 
     public function store(Request $request): RedirectResponse

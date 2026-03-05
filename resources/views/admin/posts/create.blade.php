@@ -87,8 +87,8 @@
             <div>
                 <label for="status">Status</label>
                 <select id="status" name="status" required>
-                    <option value="draft" @selected(old('status', 'draft') === 'draft')>Draft</option>
-                    <option value="published" @selected(old('status') === 'published')>Published</option>
+                    <option value="draft" @selected(old('status', $defaultStatus) === 'draft')>Draft</option>
+                    <option value="published" @selected(old('status', $defaultStatus) === 'published')>Published</option>
                 </select>
                 @error('status')
                     <p>{{ $message }}</p>
@@ -103,7 +103,7 @@
                         name="comments_enabled"
                         type="checkbox"
                         value="1"
-                        @checked(old('comments_enabled', '0') == '1')
+                        @checked(old('comments_enabled', $defaultCommentsEnabled ? '1' : '0') == '1')
                     >
                     Enable comments for this post
                 </label>

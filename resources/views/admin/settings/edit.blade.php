@@ -131,6 +131,29 @@
                 </div>
 
                 <div>
+                    <label for="default_post_comments_enabled">
+                        <input
+                            id="default_post_comments_enabled"
+                            name="default_post_comments_enabled"
+                            type="checkbox"
+                            value="1"
+                            @checked((bool) old('default_post_comments_enabled', $defaultPostCommentsEnabled))
+                        >
+                        Enable comments by default on new posts
+                    </label>
+                    <p>If disabled, "Enable comments for this post" remains unchecked by default in post creation.</p>
+                </div>
+
+                <div>
+                    <label for="default_post_status">Default status for new posts</label>
+                    <select id="default_post_status" name="default_post_status" required>
+                        <option value="draft" @selected(old('default_post_status', $defaultPostStatus) === 'draft')>Draft</option>
+                        <option value="published" @selected(old('default_post_status', $defaultPostStatus) === 'published')>Published</option>
+                    </select>
+                    <p>Controls which status is preselected on the post creation form.</p>
+                </div>
+
+                <div>
                     <label for="homepage_source">Homepage content</label>
                     <select id="homepage_source" name="homepage_source" required>
                         <option value="default" @selected(old('homepage_source', $homepageSource) === 'default')>Default welcome page</option>

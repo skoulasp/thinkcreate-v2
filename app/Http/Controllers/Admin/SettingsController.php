@@ -20,6 +20,12 @@ class SettingsController extends Controller
         $homepagePageId = Setting::getValue('website.homepage.page_id');
         $postsPerPage = Setting::getIntValue('website.blog.posts_per_page', 5, 1, 50);
         $showBlogNavLink = Setting::getBoolValue('website.navbar.show_blog_link', false);
+        $defaultPostCommentsEnabled = Setting::getBoolValue('website.posts.defaults.comments_enabled', false);
+        $defaultPostStatus = Setting::getValue('website.posts.defaults.status', 'draft');
+
+        if (! in_array($defaultPostStatus, ['draft', 'published'], true)) {
+            $defaultPostStatus = 'draft';
+        }
 
         $publishedPages = Page::query()
             ->published()
@@ -32,6 +38,8 @@ class SettingsController extends Controller
             'homepagePageId' => $homepagePageId,
             'postsPerPage' => $postsPerPage,
             'showBlogNavLink' => $showBlogNavLink,
+            'defaultPostCommentsEnabled' => $defaultPostCommentsEnabled,
+            'defaultPostStatus' => $defaultPostStatus,
             'publishedPages' => $publishedPages,
         ]);
     }
@@ -74,6 +82,8 @@ class SettingsController extends Controller
         Setting::putValue('website.homepage.page_id', isset($validated['homepage_page_id']) ? (string) $validated['homepage_page_id'] : null);
         Setting::putValue('website.blog.posts_per_page', (string) $validated['posts_per_page']);
         Setting::putValue('website.navbar.show_blog_link', $validated['show_blog_nav_link'] ? '1' : '0');
+        Setting::putValue('website.posts.defaults.comments_enabled', $validated['default_post_comments_enabled'] ? '1' : '0');
+        Setting::putValue('website.posts.defaults.status', $validated['default_post_status']);
 
         return back()->with('success', 'Website settings updated successfully.');
     }
