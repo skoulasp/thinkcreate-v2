@@ -6,15 +6,36 @@
     <section class="public-blog">
         <article class="blog-card blog-single">
             <div class="blog-meta blog-meta-top">
-                <span class="blog-meta-left">
+                <span class="blog-meta-left blog-meta-item">
+                    <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.01-8 4.5V20h16v-1.5c0-2.49-3.58-4.5-8-4.5Z" fill="currentColor"/>
+                    </svg>
                     {{ $post->author->name ?? $post->author->email ?? 'Unknown author' }}
                 </span>
-                <span class="blog-meta-right">
-                    @if ($post->published_at)
-                        {{ \Illuminate\Support\Carbon::parse($post->published_at)->format('M j, Y') }}
-                    @else
-                        -
-                    @endif
+                <span class="blog-meta-right blog-meta-inline">
+                    <span class="blog-meta-item">
+                        <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm1 11h-5V7h2v4h4Z" fill="currentColor"/>
+                        </svg>
+                        @if ($post->published_at)
+                            {{ \Illuminate\Support\Carbon::parse($post->published_at)->format('M j, Y') }}
+                        @else
+                            -
+                        @endif
+                    </span>
+
+                    @can('update', $post)
+                        <a
+                            class="blog-post-edit-link"
+                            href="{{ route('admin.posts.edit', $post) }}"
+                            title="Edit post"
+                            aria-label="Edit post"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M14.7 6.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4l-8.9 8.9-3.1.5.5-3.1 8.5-8.9Zm5.6-.2-1.8-1.8a3 3 0 0 0-4.2 0l-9 9.4a1 1 0 0 0-.3.6L4.2 20a1 1 0 0 0 1.1 1.1l5.7-.8a1 1 0 0 0 .6-.3l9.4-9a3 3 0 0 0 0-4.2Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    @endcan
                 </span>
             </div>
 
@@ -31,18 +52,21 @@
             </div>
 
             <div class="blog-meta blog-meta-bottom">
-                <span class="blog-meta-left">
+                <span class="blog-meta-left blog-meta-item">
+                    <svg class="blog-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 3H3v7h7Zm0 11H3v7h7ZM21 3h-7v7h7Zm0 11h-7v7h7Z" fill="currentColor"/>
+                    </svg>
                     @if ($post->categories->isNotEmpty())
-                        Categories: {{ $post->categories->pluck('name')->implode(', ') }}
+                        {{ $post->categories->pluck('name')->implode(', ') }}
                     @else
-                        Categories: -
+                        -
                     @endif
                 </span>
                 <span class="blog-meta-right">
                     @if ($post->tags->isNotEmpty())
-                        Tags: {{ $post->tags->pluck('name')->implode(', ') }}
+                        {{ $post->tags->pluck('name')->map(fn ($name) => "#{$name}")->implode(' ') }}
                     @else
-                        Tags: -
+                        -
                     @endif
                 </span>
             </div>

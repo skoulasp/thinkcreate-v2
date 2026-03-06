@@ -120,6 +120,32 @@
     color: var(--color-text-soft);
 }
 
+.blog-post-edit-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.55rem;
+    height: 1.55rem;
+    margin-left: 0.45rem;
+    color: var(--color-text-soft);
+    text-decoration: none;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
+}
+
+.blog-post-edit-link svg {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.blog-post-edit-link:hover,
+.blog-post-edit-link:focus-visible {
+    color: var(--color-primary);
+    border-color: var(--color-border);
+    background-color: color-mix(in srgb, var(--color-surface) 92%, white 8%);
+}
+
 .blog-meta-item {
     display: inline-flex;
     align-items: center;
