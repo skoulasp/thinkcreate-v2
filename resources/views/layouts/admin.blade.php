@@ -15,6 +15,18 @@
     @endif
 </head>
 <body class="admin-body">
+@php
+    $adminSidebarActive = [
+        'posts' => request()->routeIs('admin.posts.*'),
+        'pages' => request()->routeIs('admin.pages.*'),
+        'categories' => request()->routeIs('admin.categories.*'),
+        'tags' => request()->routeIs('admin.tags.*'),
+        'menus' => request()->routeIs('admin.menus.*'),
+        'menu_locations' => request()->routeIs('admin.menu-locations.*'),
+        'settings' => request()->routeIs('admin.settings.*'),
+        'users' => request()->routeIs('admin.users.*'),
+    ];
+@endphp
 
 @include('partials.navbar', ['variant' => 'admin'])
 
@@ -23,18 +35,19 @@
         <div class="sidebar-section">
             <h4>Content</h4>
             <ul>
-                <li><a href="{{ route('admin.posts.index') }}">Posts</a></li>
-                <li><a href="{{ route('admin.pages.index') }}">Pages</a></li>
-                <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
-                <li><a href="{{ route('admin.tags.index') }}">Tags</a></li>
-                <li><a href="{{ route('admin.menus.index') }}">Navigation</a></li>
-                <li><a href="{{ route('admin.menu-locations.edit') }}">Menu Locations</a></li>
+                <li><a href="{{ route('admin.posts.index') }}" @class(['is-active' => $adminSidebarActive['posts']])>Posts</a></li>
+                <li><a href="{{ route('admin.pages.index') }}" @class(['is-active' => $adminSidebarActive['pages']])>Pages</a></li>
+                <li><a href="{{ route('admin.categories.index') }}" @class(['is-active' => $adminSidebarActive['categories']])>Categories</a></li>
+                <li><a href="{{ route('admin.tags.index') }}" @class(['is-active' => $adminSidebarActive['tags']])>Tags</a></li>
+                <li><a href="{{ route('admin.menus.index') }}" @class(['is-active' => $adminSidebarActive['menus']])>Navigation</a></li>
+                <li><a href="{{ route('admin.menu-locations.edit') }}" @class(['is-active' => $adminSidebarActive['menu_locations']])>Menu Locations</a></li>
             </ul>
         </div>
         <div class="sidebar-section">
-            <h4>Account</h4>
+            <h4>Site</h4>
             <ul>
-                <li><a href="{{ route('admin.settings.edit') }}">Settings</a></li>
+                <li><a href="{{ route('admin.users.index') }}" @class(['is-active' => $adminSidebarActive['users']])>Users</a></li>
+                <li><a href="{{ route('admin.settings.edit') }}" @class(['is-active' => $adminSidebarActive['settings']])>Settings</a></li>
             </ul>
         </div>
     </aside>

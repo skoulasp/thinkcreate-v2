@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PostEditorImageController as AdminPostEditorImage
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BlogController;
@@ -73,6 +74,7 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
     Route::patch('settings/profile', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::patch('settings/password', [AdminSettingsController::class, 'updatePassword'])->name('settings.password.update');
     Route::patch('settings/website', [AdminSettingsController::class, 'updateWebsite'])->name('settings.website.update');
+    Route::resource('users', AdminUserController::class)->only(['index', 'show', 'destroy']);
 });
 
 Route::get('/{page:slug}', [PublicPageController::class, 'show'])->name('pages.show');

@@ -1,13 +1,29 @@
 @if ($variant === 'admin')
 @php
     $adminNavLinks = [
-        ['label' => 'Posts', 'href' => route('admin.posts.index')],
-        ['label' => 'Pages', 'href' => route('admin.pages.index')],
-        ['label' => 'Categories', 'href' => route('admin.categories.index')],
-        ['label' => 'Tags', 'href' => route('admin.tags.index')],
-        ['label' => 'Navigation', 'href' => route('admin.menus.index')],
-        ['label' => 'Menu Locations', 'href' => route('admin.menu-locations.edit')],
+        [
+            'label' => 'Site Home',
+            'href' => route('home'),
+            'active' => request()->routeIs('home'),
+        ],
+        [
+            'label' => 'Admin Dashboard',
+            'href' => route('admin.dashboard'),
+            'active' => request()->routeIs('admin.dashboard'),
+        ],
     ];
+
+    $adminActiveLinkFound = false;
+
+    foreach ($adminNavLinks as &$link) {
+        if (($link['active'] ?? false) && ! $adminActiveLinkFound) {
+            $adminActiveLinkFound = true;
+            continue;
+        }
+
+        $link['active'] = false;
+    }
+    unset($link);
 @endphp
 <header class="header" x-data="{ mobileOpen: false }" @keydown.escape.window="mobileOpen = false">
     <nav class="topnav" aria-label="Primary navigation">
@@ -31,7 +47,7 @@
 
         <div class="user user-desktop">
             @foreach ($adminNavLinks as $link)
-                <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+                <a href="{{ $link['href'] }}" @class(['is-active' => $link['active'] ?? false])>{{ $link['label'] }}</a>
             @endforeach
             <span class="user-separator" aria-hidden="true"></span>
 
@@ -49,7 +65,7 @@
     <div class="mobile-nav-panel" x-cloak x-show="mobileOpen" x-transition.opacity.duration.200ms>
         <div class="mobile-nav-links">
             @foreach ($adminNavLinks as $link)
-                <a href="{{ $link['href'] }}" @click="mobileOpen = false">{{ $link['label'] }}</a>
+                <a href="{{ $link['href'] }}" @class(['is-active' => $link['active'] ?? false]) @click="mobileOpen = false">{{ $link['label'] }}</a>
             @endforeach
 
             <span class="mobile-nav-divider" aria-hidden="true"></span>
@@ -72,6 +88,11 @@
     $hasNavbarMenuAssigned = filled($navbarLocation?->menu_id);
     $navbarMenuItems = $navbarLocation?->menu?->items ?? collect();
     $showBlogNavLink = \App\Models\Setting::getBoolValue('website.navbar.show_blog_link', false);
+    $currentPageRouteParam = request()->route('page');
+    $currentPageSlug = is_object($currentPageRouteParam)
+        ? trim((string) ($currentPageRouteParam->slug ?? ''), '/')
+        : trim((string) $currentPageRouteParam, '/');
+    $publicActiveLinkFound = false;
 
     $reservedTopLevelSegments = [];
 
@@ -132,18 +153,49 @@
             $label = $menuItem->label ?: ($menuItem->page?->title ?: $menuItem->url);
 
             if (filled($href) && filled($label)) {
+                $menuItemSlug = trim((string) ($menuItem->page?->slug ?? ''), '/');
+                $isActive = false;
+
+                if ($menuItem->page && $menuItemSlug !== '') {
+                    $isActive = request()->routeIs('pages.show') && $currentPageSlug === $menuItemSlug;
+                } else {
+                    $parsedHref = parse_url($href);
+                    $isLocalHref = ! filled($parsedHref['scheme'] ?? null) && ! filled($parsedHref['host'] ?? null);
+
+                    if ($isLocalHref) {
+                        $linkPath = trim((string) ($parsedHref['path'] ?? $href), '/');
+                        $isActive = $linkPath === '' ? request()->routeIs('home') : request()->is($linkPath);
+                    }
+                }
+
+                if ($isActive && $publicActiveLinkFound) {
+                    $isActive = false;
+                }
+
+                if ($isActive) {
+                    $publicActiveLinkFound = true;
+                }
+
                 $publicNavLinks[] = [
                     'href' => $href,
                     'label' => $label,
+                    'active' => $isActive,
                 ];
             }
         }
     }
 
     if ($showBlogNavLink) {
+        $isActiveBlogLink = request()->routeIs('blog.*') && ! $publicActiveLinkFound;
+
+        if ($isActiveBlogLink) {
+            $publicActiveLinkFound = true;
+        }
+
         $publicNavLinks[] = [
             'href' => route('blog.index'),
             'label' => 'Blog',
+            'active' => $isActiveBlogLink,
         ];
     }
 @endphp
@@ -168,7 +220,7 @@
 
         <div class="user user-desktop">
             @foreach ($publicNavLinks as $link)
-                <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+                <a href="{{ $link['href'] }}" @class(['is-active' => $link['active'] ?? false])>{{ $link['label'] }}</a>
             @endforeach
 
             @if (! empty($publicNavLinks))
@@ -201,7 +253,7 @@
     <div class="mobile-nav-panel" x-cloak x-show="mobileOpen" x-transition.opacity.duration.200ms>
         <div class="mobile-nav-links">
             @foreach ($publicNavLinks as $link)
-                <a href="{{ $link['href'] }}" @click="mobileOpen = false">{{ $link['label'] }}</a>
+                <a href="{{ $link['href'] }}" @class(['is-active' => $link['active'] ?? false]) @click="mobileOpen = false">{{ $link['label'] }}</a>
             @endforeach
 
             @if (! empty($publicNavLinks))

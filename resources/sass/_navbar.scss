@@ -71,6 +71,12 @@
     font-size: 0.95rem;
 }
 
+.user a.is-active,
+.mobile-nav-links a.is-active {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+}
+
 .username {
     font-size: 0.95rem;
     color: #fff;

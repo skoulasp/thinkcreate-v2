@@ -1,26 +1,30 @@
 # ThinkCreate v2
 
 ThinkCreate v2 is a custom content management system built with Laravel.  
-The project is designed as a full-stack web application and serves as a portfolio project demonstrating modern backend-driven web development using the Laravel framework.
+It is a full-stack web application designed as a long-term portfolio and learning project, demonstrating modern backend-driven development practices using the Laravel framework.
+
+This project was inspired by my earlier 2020 capstone project, where I built a CMS using Python and Django.  
+As my professional focus has since shifted toward the Laravel ecosystem, ThinkCreate v2 was created as a way to re-architect a similar system using Laravel, applying improved architectural thinking, cleaner patterns, and more mature full-stack development practices.
 
 ## Overview
 
 ThinkCreate v2 focuses on clean architecture, maintainable code, and practical CMS functionality.  
-The system includes a public-facing website as well as an administrative dashboard for managing content.
+It includes both a public-facing website and an administrative dashboard for managing content and site configuration.
 
-This project was developed as part of my portfolio to showcase my ability to design and build a complete web application using Laravel.
+Rather than being a tutorial-style project, ThinkCreate v2 is intended to simulate a realistic product environment and serve as a strong portfolio piece showcasing full-stack Laravel development.
 
 ## Features
 
-- Blog posts and static pages
-- Admin dashboard
+- Blog posts and static pages management
+- Administrative dashboard
 - Comment system
-- Comment voting
+- Comment voting (likes / dislikes)
+- Rich text editing with media support
 - Featured image uploads
 - Search functionality
 - Pagination
 - Dynamic navigation menus
-- Settings system
+- Website settings system
 - Authorization using Laravel Policies
 - Role-based permissions (admin / author)
 - Clean Blade-based frontend templates
@@ -36,13 +40,14 @@ This project was developed as part of my portfolio to showcase my ability to des
 
 ## Project Goals
 
-The goal of this project is to demonstrate:
+The goal of ThinkCreate v2 is to demonstrate:
 
-- Backend application architecture
-- Laravel best practices
+- Backend application architecture and system design
+- Realistic CMS content workflows
+- Clean and maintainable Laravel code practices
 - Authorization and security patterns
-- Content management workflows
-- Full-stack integration between backend and frontend
+- Integration between backend logic and user interface
+- Iterative feature development similar to real-world product evolution
 
 ## Installation
 

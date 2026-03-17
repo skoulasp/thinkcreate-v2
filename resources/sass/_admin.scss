@@ -37,6 +37,14 @@ body.admin-body {
         background-color: #dce8e2;
         article {
             background-color: rgb(199, 219, 209);
+
+            &.admin-stat-card {
+                background: linear-gradient(
+                    90deg,
+                    rgb(199, 219, 209) 0%,
+                    #dce8e2 100%
+                );
+            }
         }
     }
 }
@@ -98,6 +106,11 @@ body.admin-body {
     display: block;
     padding: 0.42rem 0.55rem;
     border-radius: var(--radius-sm);
+}
+
+.admin-sidebar a.is-active {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
 }
 
 .admin-main {
